@@ -1,0 +1,21 @@
+type Photo @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  url: String!
+  description: String
+  details: AWSJSON
+  personID: ID! @index(name: "byPerson")
+  Owner: Person @belongsTo(fields: ["personID"])
+  Creator: Person @belongsTo(fields: ["personID"])
+}
+
+type Person @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  surname: String
+  username: String!
+  email: AWSEmail
+  preferences: AWSJSON
+  settings: AWSJSON
+  Photos: [Photo] @hasMany(indexName: "byPerson", fields: ["id"])
+  points: Int!
+}
